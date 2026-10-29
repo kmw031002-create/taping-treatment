@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="ko" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로페셔널 원격 물리치료 & 맞춤형 테이핑 가이드</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome CDN for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        medical: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="h-full bg-slate-50 text-slate-800 flex flex-col font-sans antialiased selection:bg-medical-100 selection:text-medical-900">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-medical-600 flex items-center justify-center text-white shadow-md shadow-medical-500/20">
+                    <i class="fa-solid font-bold fa-user-doctor text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-slate-900 tracking-tight">메디컬 테이프 & 리햅 클리닉</h1>
+                    <p class="text-xs text-slate-500">20년 경력 대학병원 물리치료사 및 스포츠 재활 전문가 자문 시스템</p>
+                </div>
+            </div>
+            <div class="hidden sm:flex items-center space-x-2 bg-medical-50 text-medical-700 px-3 py-1.5 rounded-full text-xs font-medium border border-medical-100">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>원격 비대면 진단 및 처방 대기중</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 max-w-5xl w-full mx-auto px-4 py-8 flex flex-col">
+        
+        <!-- Progress Stepper -->
+        <nav aria-label="Progress" class="mb-8">
+            <ol role="list" class="flex items-center justify-between relative before:absolute before:top-1/2 before:left-0 before:right-0 before:h-0.5 before:bg-slate-200 before:-translate-y-1/2 before:z-0">
+                <li id="step1-indicator" class="relative z-10 flex flex-col items-center group cursor-pointer" onclick="goToStep(1)">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm bg-medical-600 text-white shadow-md shadow-medical-500/20 transition-all duration-300">1</div>
+                    <span class="mt-2 text-xs font-semibold text-medical-700">문진표 작성</span>
+                </li>
+                <li id="step2-indicator" class="relative z-10 flex flex-col items-center group cursor-pointer" onclick="goToStep(2)">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm bg-slate-200 text-slate-600 transition-all duration-300">2</div>
+                    <span class="mt-2 text-xs font-medium text-slate-500">사진 및 영상 입력</span>
+                </li>
+                <li id="step3-indicator" class="relative z-10 flex flex-col items-center group cursor-pointer" onclick="goToStep(3)">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm bg-slate-200 text-slate-600 transition-all duration-300">3</div>
+                    <span class="mt-2 text-xs font-medium text-slate-500">전문가 중재 리포트</span>
+                </li>
+            </ol>
+        </nav>
+
+        <!-- Step 1: Dynamic Questionnaire -->
+        <section id="step1-container" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6 transition-all duration-300">
+            <div class="border-b border-slate-100 pb-4">
+                <h2 class="text-xl font-bold text-slate-900">1. 환자 자가 문진표 (Patient Self-Assessment)</h2>
+                <p class="text-sm text-slate-500 mt-1">정확한 테이핑 및 재활 처방을 위해 통증 부위와 세부 증상을 상세히 입력해주세요.</p>
+            </div>
+
+            <form id="questionnaire-form" class="space-y-6">
+                <!-- Pain Location Selection -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-3">손상 및 통증 부위 선택 <span class="text-rose-500">*</span></label>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <label class="cursor-pointer border-2 border-slate-200 rounded-xl p-4 text-center hover:border-medical-500 hover:bg-medical-50/50 transition-all flex flex-col items-center justify-center gap-2 has-[:checked]:border-medical-600 has-[:checked]:bg-medical-50 has-[:checked]:text-medical-900">
+                            <input type="radio" name="painLocation" value="shoulder" class="sr-only" onchange="toggleToeSpecificQuestions()" required>
+                            <i class="fa-solid fa-child-reaching text-2xl text-slate-600"></i>
+                            <span class="text-sm font-medium">어깨 (Shoulder)</span>
+                        </label>
+                        <label class="cursor-pointer border-2 border-slate-200 rounded-xl p-4 text-center hover:border-medical-500 hover:bg-medical-50/50 transition-all flex flex-col items-center justify-center gap-2 has-[:checked]:border-medical-600 has-[:checked]:bg-medical-50 has-[:checked]:text-medical-900">
+                            <input type="radio" name="painLocation" value="knee" class="sr-only" onchange="toggleToeSpecificQuestions()">
+                            <i class="fa-solid fa-bone text-2xl text-slate-600"></i>
+                            <span class="text-sm font-medium">무릎 (Knee)</span>
+                        </label>
+                        <label class="cursor-pointer border-2 border-slate-200 rounded-xl p-4 text-center hover:border-medical-500 hover:bg-medical-50/50 transition-all flex flex-col items-center justify-center gap-2 has-[:checked]:border-medical-600 has-[:checked]:bg-medical-50 has-[:checked]:text-medical-900">
+                            <input type="radio" name="painLocation" value="ankle" class="sr-only" onchange="toggleToeSpecificQuestions()">
+                            <i class="fa-solid fa-socks text-2xl text-slate-600"></i>
+                            <span class="text-sm font-medium">발목 (Ankle)</span>
+                        </label>
+                        <label class="cursor-pointer border-2 border-slate-200 rounded-xl p-4 text-center hover:border-medical-500 hover:bg-medical-50/50 transition-all flex flex-col items-center justify-center gap-2 has-[:checked]:border-medical-600 has-[:checked]:bg-medical-50 has-[:checked]:text-medical-900">
+                            <input type="radio" name="painLocation" value="lower_back" class="sr-only" onchange="toggleToeSpecificQuestions()">
+                            <i class="fa-solid fa-person-dots-from-line text-2xl text-slate-600"></i>
+                            <span class="text-sm font-medium">허리 (Lower Back)</span>
+                        </label>
+                        <label class="cursor-pointer border-2 border-slate-200 rounded-xl p-4 text-center hover:border-medical-500 hover:bg-medical-50/50 transition-all flex flex-col items-center justify-center gap-2 has-[:checked]:border-medical-600 has-[:checked]:bg-medical-50 has-[:checked]:text-medical-900">
+                            <input type="radio" name="painLocation" value="wrist" class="sr-only" onchange="toggleToeSpecificQuestions()">
+                            <i class="fa-solid fa-hand-back-fist text-2xl text-slate-600"></i>
+                            <span class="text-sm font-medium">손목 (Wrist)</span>
+                        </label>
+                        <label class="cursor-pointer border-2 border-slate-200 rounded-xl p-4 text-center hover:border-medical-500 hover:bg-medical-50/50 transition-all flex flex-col items-center justify-center gap-2 has-[:checked]:border-medical-600 has-[:checked]:bg-medical-50 has-[:checked]:text-medical-900">
+                            <input type="radio" name="painLocation" value="elbow" class="sr-only" onchange="toggleToeSpecificQuestions()">
+                            <i class="fa-solid fa-hand text-2xl text-slate-600"></i>
+                            <span class="text-sm font-medium">팔꿈치 (Elbow)</span>
+                        </label>
+                        <label class="cursor-pointer border-2 border-slate-200 rounded-xl p-4 text-center hover:border-medical-500 hover:bg-medical-50/50 transition-all flex flex-col items-center justify-center gap-2 has-[:checked]:border-medical-600 has-[:checked]:bg-medical-50 has-[:checked]:text-medical-900">
+                            <input type="radio" name="painLocation" value="neck" class="sr-only" onchange="toggleToeSpecificQuestions()">
+                            <i class="fa-solid fa-user-ninja text-2xl text-slate-600"></i>
+                            <span class="text-sm font-medium">목 (Neck)</span>
+                        </label>
+                        <label class="cursor-pointer border-2 border-slate-200 rounded-xl p-4 text-center hover:border-medical-500 hover:bg-medical-50/50 transition-all flex flex-col items-center justify-center gap-2 has-[:checked]:border-medical-600 has-[:checked]:bg-medical-50 has-[:checked]:text-medical-900">
+                            <input type="radio" name="painLocation" value="toes" class="sr-only" onchange="toggleToeSpecificQuestions()">
+                            <i class="fa-solid fa-shoe-prints text-2xl text-slate-600"></i>
+                            <span class="text-sm font-medium">발가락 (Toes/무지외반)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Pain Intensity (VAS Scale) -->
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <label class="text-sm font-semibold text-slate-800">통증 강도 (VAS 0~10)</label>
+                        <span id="vas-value" class="text-sm font-bold text-medical-700 bg-white px-3 py-1 rounded-lg border border-slate-200 shadow-sm">5 점 (중등도 통증)</span>
+                    </div>
+                    <input type="range" id="vas-slider" min="0" max="10" value="5" step="1" oninput="updateVasLabel(this.value)" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-medical-600">
+                    <div class="flex justify-between text-[11px] text-slate-400 font-medium">
+                        <span>0 (통증 없음)</span>
+                        <span>3 (경증)</span>
+                        <span>7 (심한 통증)</span>
+                        <span>10 (극심한 응급)</span>
+                    </div>
+                </div>
+
+                <!-- Duration & Mechanism -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">증상 지속 기간</label>
+                        <select name="duration" class="w-full bg-white border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-medical-500 focus:outline-none">
+                            <option value="acute_1w">급성 (1주일 이내)</option>
+                            <option value="subacute_1m" selected>subacute (1주일 ~ 1개월)</option>
+                            <option value="chronic_3m">만성 (3개월 이상)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">통증 악화 요인</label>
+                        <select name="mechanism" class="w-full bg-white border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-medical-500 focus:outline-none">
+                            <option value="weight_bearing">체중을 실을 때 / 걸을 때</option>
+                            <option value="motion">특정 관절 운동 시</option>
+                            <option value="rest">휴식 중 또는 야간 통증</option>
+                            <option value="touch">해당 부위 부종 및 압통 시</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Toe Specific Detailed Questionnaire (Visible when 'toes' selected) -->
+                <div id="toe-questions-container" class="hidden bg-medical-50/60 border border-medical-200 rounded-2xl p-5 space-y-4 animate-in fade-in duration-300">
+                    <div class="flex items-center space-x-2 text-medical-800 font-bold text-sm">
+                        <i class="fa-solid fa-notes-medical"></i>
+                        <span>발가락 질환 정밀 자가 문진 (Toe Detailed Survey)</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">엄지발가락 변형 정도 (무지외반각)</label>
+                            <select id="toe-angle" class="w-full bg-white border border-slate-300 rounded-xl p-2.5 text-xs focus:ring-2 focus:ring-medical-500 focus:outline-none">
+                                <option value="mild">경도 (엄지가 둘째 발가락 쪽으로 살짝 휘어짐)</option>
+                                <option value="moderate" selected>중등도 (관절 부위가 튀어나오고 신발 마찰 통증)</option>
+                                <option value="severe">중증 (둘째 발가락과 겹치거나 심한 변형)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">주요 통증 지점</label>
+                            <select id="toe-pain-site" class="w-full bg-white border border-slate-300 rounded-xl p-2.5 text-xs focus:ring-2 focus:ring-medical-500 focus:outline-none">
+                                <option value="1st_mtp" selected>엄지발가락 돌출 관절 (제1 중족족지관절)</option>
+                                <option value="interdigital">3-4번째 발가락 사이 (지간신경종 의심/저림)</option>
+                                <option value="plantar_arch">발가락 뿌리 밑 바닥 (족저근막 부착부)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end pt-4 border-t border-slate-100">
+                    <button type="button" onclick="validateStep1()" class="bg-medical-600 hover:bg-medical-700 text-white font-semibold px-6 py-3 rounded-xl shadow-lg shadow-medical-500/30 transition-all flex items-center space-x-2">
+                        <span>다음 단계: 사진 및 영상 입력</span>
+                        <i class="fa-solid fa-arrow-right text-sm"></i>
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Step 2: Visual & Video Input -->
+        <section id="step2-container" class="hidden bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6 transition-all duration-300">
+            <div class="border-b border-slate-100 pb-4">
+                <h2 class="text-xl font-bold text-slate-900">2. 사진 업로드 및 실시간 웹캠 캡처</h2>
+                <p class="text-sm text-slate-500 mt-1">환부의 부종, 변형 상태 사진을 첨부하거나 노트북 웹캠으로 실시간 촬영하여 분석에 활용합니다.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Photo Upload Box -->
+                <div class="border-2 border-dashed border-slate-300 rounded-2xl p-6 flex flex-col items-center justify-center text-center hover:border-medical-500 transition-all bg-slate-50 relative group">
+                    <input type="file" id="photo-file-input" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer" onchange="handlePhotoUpload(event)">
+                    <div class="w-16 h-16 bg-white rounded-full shadow-sm flex items-center justify-center text-medical-600 mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-800">환부 사진 업로드하기</h3>
+                    <p class="text-xs text-slate-500 mt-1">기기에서 사진 파일을 선택하거나 드래그하여 올려주세요.</p>
+                    <div id="photo-preview-container" class="hidden mt-4 w-full">
+                        <img id="photo-preview" src="" alt="Uploaded Preview" class="max-h-40 mx-auto rounded-lg shadow border border-slate-200 object-cover">
+                        <p class="text-xs text-emerald-600 font-medium mt-2"><i class="fa-solid fa-circle-check"></i> 사진 업로드 완료</p>
+                    </div>
+                </div>
+
+                <!-- Webcam Live Capture Box -->
+                <div class="border border-slate-200 rounded-2xl p-6 bg-slate-50 flex flex-col items-center justify-between">
+                    <div class="w-full flex justify-between items-center mb-3">
+                        <h3 class="text-base font-bold text-slate-800">노트북 웹캠 실시간 캡처</h3>
+                        <span id="webcam-status" class="text-xs px-2.5 py-1 rounded-full bg-slate-200 text-slate-600 font-medium">카메라 대기중</span>
+                    </div>
+
+                    <div class="w-full bg-slate-900 rounded-xl overflow-hidden relative aspect-video flex items-center justify-center shadow-inner">
+                        <video id="webcam-video" autoplay playsinline class="w-full h-full object-cover"></video>
+                        <canvas id="webcam-canvas" class="hidden"></canvas>
+                        <div id="webcam-placeholder" class="absolute inset-0 flex flex-col items-center justify-center text-slate-400">
+                            <i class="fa-solid fa-video text-3xl mb-2"></i>
+                            <p class="text-xs">아래 버튼을 눌러 카메라를 켜세요</p>
+                        </div>
+                        <img id="snapshot-preview" src="" alt="Snapshot" class="hidden absolute inset-0 w-full h-full object-cover">
+                    </div>
+
+                    <div class="w-full flex items-center justify-center gap-3 mt-4">
+                        <button type="button" id="start-camera-btn" onclick="startWebcam()" class="bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow transition-all flex items-center gap-1.5">
+                            <i class="fa-solid fa-camera"></i>
+                            <span>카메라 켜기</span>
+                        </button>
+                        <button type="button" id="capture-btn" onclick="captureSnapshot()" disabled class="bg-medical-600 hover:bg-medical-700 disabled:bg-slate-300 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow transition-all flex items-center gap-1.5">
+                            <i class="fa-solid fa-circle-dot"></i>
+                            <span>순간 캡처</span>
+                        </button>
+                        <button type="button" id="retake-btn" onclick="retakeSnapshot()" class="hidden bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow transition-all flex items-center gap-1.5">
+                            <i class="fa-solid fa-rotate-right"></i>
+                            <span>다시 찍기</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="flex justify-between pt-4 border-t border-slate-100">
+                <button type="button" onclick="goToStep(1)" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-6 py-3 rounded-xl transition-all">이전</button>
+                <button type="button" onclick="generateReport()" class="bg-medical-600 hover:bg-medical-700 text-white font-semibold px-6 py-3 rounded-xl shadow-lg shadow-medical-500/35 transition-all flex items-center space-x-2">
+                    <span>전문가 중재 리포트 생성하기</span>
+                    <i class="fa-solid fa-file-medical text-sm"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- Loading Overlay during Report Generation -->
+        <section id="loading-container" class="hidden bg-white rounded-2xl shadow-sm border border-slate-200 p-12 text-center space-y-6">
+            <div class="w-16 h-16 border-4 border-medical-200 border-t-medical-600 rounded-full animate-spin mx-auto"></div>
+            <div class="space-y-2">
+                <h3 class="text-lg font-bold text-slate-900">20년 임상 경력 분석 알고리즘 가동 중...</h3>
+                <p id="loading-status-text" class="text-sm text-slate-500">환자 문진 데이터 및 시각적 이미지 패턴 분석 중</p>
+            </div>
+        </section>
+
+        <!-- Step 3: Clinical Expert Analysis & Intervention Report -->
+        <section id="step3-container" class="hidden bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-8 transition-all duration-300">
+            <div class="border-b border-slate-100 pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Clinical Verified Report</span>
+                    <h2 class="text-2xl font-bold text-slate-900 mt-2">임상 전문가 맞춤형 중재 리포트</h2>
+                    <p class="text-sm text-slate-500">물리치료사 면허 번호 및 임상 스포츠 재활 지침에 기반하여 자동 생성되었습니다.</p>
+                </div>
+                <button onclick="window.print()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl text-xs font-semibold flex items-center space-x-2 transition-all">
+                    <i class="fa-solid fa-print"></i>
+                    <span>리포트 인쇄/저장</span>
+                </button>
+            </div>
+
+            <!-- Patient Summary Card -->
+            <div class="bg-medical-50 border border-medical-100 rounded-2xl p-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div>
+                    <span class="text-xs text-slate-500 font-medium">선택 환부</span>
+                    <p id="report-location" class="text-base font-bold text-slate-900 mt-0.5">-</p>
+                </div>
+                <div>
+                    <span class="text-xs text-slate-500 font-medium">통증 강도 (VAS)</span>
+                    <p id="report-vas" class="text-base font-bold text-medical-700 mt-0.5">-</p>
+                </div>
+                <div>
+                    <span class="text-xs text-slate-500 font-medium">손상 시기 및 양상</span>
+                    <p id="report-duration" class="text-base font-bold text-slate-900 mt-0.5">-</p>
+                </div>
+                <div>
+                    <span class="text-xs text-slate-500 font-medium">임상 판정 요약</span>
+                    <p id="report-diagnosis" class="text-base font-bold text-emerald-700 mt-0.5">-</p>
+                </div>
+            </div>
+
+            <!-- Kinesiology Taping Guide -->
+            <div class="space-y-4">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 rounded-lg bg-medical-600 text-white flex items-center justify-center font-bold text-sm">1</div>
+                    <h3 class="text-lg font-bold text-slate-900">맞춤형 키네시오로지 테이핑 가이드 (Kinesiology Taping Prescription)</h3>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 space-y-3">
+                        <span class="text-xs bg-medical-100 text-medical-800 font-bold px-2.5 py-1 rounded-md">테이프 스펙</span>
+                        <h4 id="taping-name" class="font-bold text-slate-900 text-base">-</h4>
+                        <ul class="text-xs text-slate-600 space-y-1.5 list-disc list-inside">
+                            <li><strong class="text-slate-700">스트립 모양:</strong> <span id="taping-shape">-</span></li>
+                            <li><strong class="text-slate-700">적용 장력:</strong> <span id="taping-tension">-</span></li>
+                            <li><strong class="text-slate-700">타겟 근육/인대:</strong> <span id="taping-target">-</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="md:col-span-2 bg-slate-50 border border-slate-200 rounded-xl p-5 space-y-3">
+                        <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-1 rounded-md">단계별 부착 방법 (Step-by-Step)</span>
+                        <ol id="taping-steps" class="text-xs text-slate-700 space-y-2 list-decimal list-inside leading-relaxed">
+                            <!-- Dynamic Taping Instructions -->
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rehabilitation Exercise Recommendations -->
+            <div class="space-y-4 pt-4 border-t border-slate-100">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 rounded-lg bg-medical-600 text-white flex items-center justify-center font-bold text-sm">2</div>
+                    <h3 class="text-lg font-bold text-slate-900">맞춤형 재활 운동 처방 (Rehabilitation Exercise Protocol)</h3>
+                </div>
+
+                <div id="rehab-exercises-container" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Dynamic Exercise Cards -->
+                </div>
+            </div>
+
+            <!-- Expert Advice / Precautions -->
+            <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 text-amber-900 text-xs leading-relaxed space-y-2">
+                <div class="flex items-center space-x-2 font-bold text-amber-800 text-sm">
+                    <i class="fa-solid fa-triangle-exclamation text-base"></i>
+                    <span>20년 임상 물리치료사 주의사항 및 권고사항</span>
+                </div>
+                <p>본 원격 테이핑 및 운동 처방은 비대면 자가 관리용 가이드입니다. 운동 중 VAS 5점 이상의 날카롭거나 극심한 통증이 발생할 경우 즉시 중단하시기 바랍니다. 2주 이상 증상이 호전되지 않을 경우 반드시 대학병원 정형외과 전문의 및 물리치료사의 대면 정밀 진단을 받으세요.</p>
+            </div>
+
+            <div class="flex justify-between pt-4 border-t border-slate-100">
+                <button type="button" onclick="goToStep(2)" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-6 py-3 rounded-xl transition-all">이전 단계로 수정</button>
+                <button type="button" onclick="resetClinic()" class="bg-slate-800 hover:bg-slate-900 text-white font-semibold px-6 py-3 rounded-xl shadow transition-all">새로운 문진 시작하기</button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Custom Notification Modal -->
+    <div id="custom-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 text-center space-y-4 shadow-xl border border-slate-100 animate-in fade-in zoom-in duration-200">
+            <div id="modal-icon" class="w-12 h-12 rounded-full bg-medical-50 text-medical-600 flex items-center justify-center mx-auto text-xl font-bold">i</div>
+            <h3 id="modal-title" class="text-base font-bold text-slate-900">알림</h3>
+            <p id="modal-message" class="text-xs text-slate-600">메시지 내용</p>
+            <button onclick="closeModal()" class="w-full bg-medical-600 hover:bg-medical-700 text-white font-semibold py-2.5 rounded-xl text-xs transition-all shadow-md shadow-medical-500/20">확인</button>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        let currentStep = 1;
+        let mediaStream = null;
+        let capturedPhotoData = null;
+
+        function toggleToeSpecificQuestions() {
+            const painLocRadio = document.querySelector('input[name="painLocation"]:checked');
+            const toeQuestions = document.getElementById('toe-questions-container');
+            if (painLocRadio && painLocRadio.value === 'toes') {
+                toeQuestions.classList.remove('hidden');
+            } else {
+                toeQuestions.classList.add('hidden');
+            }
+        }
+
+        // VAS Slider Update
+        function updateVasLabel(val) {
+            const label = document.getElementById('vas-value');
+            let desc = "가벼운 통증";
+            if (val == 0) desc = "통증 없음";
+            else if (val <= 3) desc = "경증 통증";
+            else if (val <= 6) desc = "중등도 통증";
+            else if (val <= 8) desc = "심한 통증";
+            else desc = "극심한 응급 통증";
+            
+            label.innerText = `${val} 점 (${desc})`;
+        }
+
+        // Step Navigation Logic
+        function goToStep(step) {
+            currentStep = step;
+            document.getElementById('step1-container').classList.add('hidden');
+            document.getElementById('step2-container').classList.add('hidden');
+            document.getElementById('loading-container').classList.add('hidden');
+            document.getElementById('step3-container').classList.add('hidden');
+
+            // Update indicators
+            for (let i = 1; i <= 3; i++) {
+                const ind = document.getElementById(`step${i}-indicator`);
+                const circle = ind.querySelector('div');
+                const text = ind.querySelector('span');
+                
+                if (i < step) {
+                    circle.className = "w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm bg-emerald-600 text-white shadow-md shadow-emerald-500/20 transition-all duration-300";
+                    text.className = "mt-2 text-xs font-semibold text-emerald-700";
+                    circle.innerHTML = "✓";
+                } else if (i === step) {
+                    circle.className = "w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm bg-medical-600 text-white shadow-md shadow-medical-500/20 transition-all duration-300";
+                    text.className = "mt-2 text-xs font-semibold text-medical-700";
+                    circle.innerHTML = i;
+                } else {
+                    circle.className = "w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm bg-slate-200 text-slate-600 transition-all duration-300";
+                    text.className = "mt-2 text-xs font-medium text-slate-500";
+                    circle.innerHTML = i;
+                }
+            }
+
+            if (step === 1) {
+                document.getElementById('step1-container').classList.remove('hidden');
+            } else if (step === 2) {
+                document.getElementById('step2-container').classList.remove('hidden');
+            } else if (step === 3) {
+                document.getElementById('step3-container').classList.remove('hidden');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Validate Step 1
+        function validateStep1() {
+            const selectedLocation = document.querySelector('input[name="painLocation"]:checked');
+            if (!selectedLocation) {
+                showModal("필수 입력 안내", "손상 및 통증 부위를 최소 1곳 이상 선택해주세요.", "warning");
+                return;
+            }
+            goToStep(2);
+        }
+
+        // Photo Upload Handler
+        function handlePhotoUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    capturedPhotoData = e.target.result;
+                    const preview = document.getElementById('photo-preview');
+                    preview.src = capturedPhotoData;
+                    document.getElementById('photo-preview-container').classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Webcam Management
+        async function startWebcam() {
+            const video = document.getElementById('webcam-video');
+            const placeholder = document.getElementById('webcam-placeholder');
+            const status = document.getElementById('webcam-status');
+            const captureBtn = document.getElementById('capture-btn');
+            const startBtn = document.getElementById('start-camera-btn');
+
+            try {
+                mediaStream = await navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false });
+                video.srcObject = mediaStream;
+                placeholder.classList.add('hidden');
+                status.innerText = "라이브 스트리밍 중";
+                status.className = "text-xs px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-semibold";
+                captureBtn.disabled = false;
+                startBtn.innerHTML = '<i class="fa-solid fa-rotate"></i><span>카메라 재시작</span>';
+            } catch (err) {
+                console.error("Webcam error:", err);
+                showModal("카메라 연결 오류", "웹캠 권한이 거부되었거나 장치를 사용할 수 없습니다. 사진 업로드를 대신 이용해주세요.", "error");
+            }
+        }
+
+        function captureSnapshot() {
+            const video = document.getElementById('webcam-video');
+            const canvas = document.getElementById('webcam-canvas');
+            const snapshot = document.getElementById('snapshot-preview');
+            const captureBtn = document.getElementById('capture-btn');
+            const retakeBtn = document.getElementById('retake-btn');
+
+            canvas.width = video.videoWidth || 640;
+            canvas.height = video.videoHeight || 480;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            const dataUrl = canvas.toDataURL('image/png');
+            snapshot.src = dataUrl;
+            snapshot.classList.remove('hidden');
+            capturedPhotoData = dataUrl;
+
+            // Stop webcam stream to save resources
+            if (mediaStream) {
+                mediaStream.getTracks().forEach(track => track.stop());
+            }
+
+            captureBtn.classList.add('hidden');
+            retakeBtn.classList.remove('hidden');
+            document.getElementById('webcam-status').innerText = "캡처 완료";
+        }
+
+        function retakeSnapshot() {
+            const snapshot = document.getElementById('snapshot-preview');
+            const captureBtn = document.getElementById('capture-btn');
+            const retakeBtn = document.getElementById('retake-btn');
+            
+            snapshot.classList.add('hidden');
+            snapshot.src = "";
+            captureBtn.classList.remove('hidden');
+            retakeBtn.classList.add('hidden');
+            startWebcam();
+        }
+
+        // Generate Clinical Report
+        function generateReport() {
+            document.getElementById('step2-container').classList.add('hidden');
+            document.getElementById('loading-container').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            setTimeout(() => {
+                document.getElementById('loading-container').classList.add('hidden');
+                document.getElementById('step3-container').classList.remove('hidden');
+                buildReportData();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 1200);
+        }
+
+        // Comprehensive Clinical Database
+        const clinicalDatabase = {
+            shoulder: {
+                name: "어깨 (Shoulder / Rotator Cuff)",
+                diagnosis: "회전근개 충돌증후군 및 삼각근 피로",
+                tapingName: "회전근개 안정화 및 삼각근 감압 I/Y형 테이핑",
+                shape: "Y-Strip (관절 지지) + I-Strip (근막 이완)",
+                tension: "15% ~ 25% (약한 장력)",
+                target: "극상근 (Supraspinatus) 및 삼각근 (Deltoid)",
+                steps: [
+                    "어깨를 가벼운 내회전 상태로 두고 척추 정렬을 바르게 합니다.",
+                    "Y형 테이프의 베이스를 견갑골 극상와 부위에 무장력으로 고정합니다.",
+                    "15%의 가벼운 장력으로 상완골 대결절 부근까지 Y테이프의 두 갈래를 부착합니다.",
+                    "보조 I형 테이프를 통증 유발 부위에 교차 형태로 25% 장력을 주어 부착 후 손바닥으로 문질러 활성화합니다."
+                ],
+                exercises: [
+                    {
+                        title: "진자 운동 (Pendulum Exercise)",
+                        desc: "상체를 숙이고 아픈 팔을 중력에 맡긴 채 시계방향 및 반시계방향으로 원을 그리며 회전합니다.",
+                        dose: "회당 1분간, 하루 3세트"
+                    },
+                    {
+                        title: "벽 슬라이드 (Wall Slide)",
+                        desc: "벽에 팔뚝을 대고 천천히 위로 밀어올리며 견갑골 상방회전을 유도합니다.",
+                        dose: "10회씩 3세트"
+                    }
+                ]
+            },
+            knee: {
+                name: "무릎 (Knee / Patellofemoral)",
+                diagnosis: "슬개대퇴동통증후군 및 슬개건염 초기",
+                tapingName: "슬개골 안정화 및 대퇴사두근 보조 Y형 테이핑",
+                shape: "Y-Strip (슬개골 패싱) + U-Strip (인대 지지)",
+                tension: "20% ~ 30% (중등도 장력)",
+                target: "슬개골 (Patella) 및 슬개인대 (Patellar Tendon)",
+                steps: [
+                    "무릎을 약 30도 정도 가볍게 굽힌 상태를 유지합니다.",
+                    "Y형 테이프의 중앙을 슬개골 하단에 위치시키고 양쪽으로 25% 장력을 주어 슬개골 테두리를 감싸듯 부착합니다.",
+                    "U형 보조 테이프를 슬개건 하단에 수평으로 단단히 감싸 관절의 흔들림을 잡아줍니다.",
+                    "끝부분(Anchor)은 장력 없이 부착하여 피부 자극을 방지합니다."
+                ],
+                exercises: [
+                    {
+                        title: "단말 무릎 펴기 (TKE - Terminal Knee Extension)",
+                        desc: "탄력밴드를 무릎 뒤에 걸고 무릎을 곧게 펴며 대퇴사두근 안쪽(VMO)을 수축합니다.",
+                        dose: "15회씩 3세트"
+                    },
+                    {
+                        title: "스탠딩 월 싯 (Wall Sit / Isometric)",
+                        desc: "등을 벽에 기대고 무릎을 45도 내외로 굽힌 상태에서 10초간 정지합니다.",
+                        dose: "10초 유지 x 5회"
+                    }
+                ]
+            },
+            ankle: {
+                name: "발목 (Ankle / Lateral Ligament)",
+                diagnosis: "외측 측면인대(ATFL) 경미한 염좌",
+                tapingName: "발목 외측 안정화 및 족근관절 지지 테이핑",
+                shape: "Stirrup I-Strip (거골 고정) + Figure-8 Strip",
+                tension: "30% ~ 40% (안정화 장력)",
+                target: "전거비인대 (ATFL) 및 비골근",
+                steps: [
+                    "발목을 90도 중립 상태(Dorsiflexion)로 고정합니다.",
+                    "안쪽 복사뼈 위에서 시작하여 발바닥을 거쳐 바깥쪽 복사뼈 위로 35% 장력을 주어 당겨 올립니다.",
+                    "피겨-8(Figure-8) 형태로 발등과 발목을 교차하여 8자 모양으로 감아줍니다.",
+                    "모든 앵커 포인트는 장력 없이 마무리하여 혈액순환을 보장합니다."
+                ],
+                exercises: [
+                    {
+                        title: "발목 알파벳 운동 (Ankle Alphabet)",
+                        desc: "발끝으로 공중에 대문자 알파벳 A부터 Z까지 천천히 그려주며 가동범위를 회복합니다.",
+                        dose: "1세트 완료, 하루 3회"
+                    },
+                    {
+                        title: "한 발 균형 잡기 (Single-Leg Balance)",
+                        desc: "맨바닥에서 다리 하나로 서서 발목 주변 고유수용성 감각을 자극합니다.",
+                        dose: "30초 유지 x 3세트"
+                    }
+                ]
+            },
+            lower_back: {
+                name: "허리 (Lower Back / Lumbar Spine)",
+                diagnosis: "요부 근막염 및 기립근 긴장증",
+                tapingName: "요추 기립근 이완 및 척주 지지 I형 테이핑",
+                shape: "Parallel I-Strips (척추 기립근 양옆)",
+                tension: "15% (경추/요추 신전 장력)",
+                target: "척주기립근 (Erector Spinae)",
+                steps: [
+                    "상체를 앞으로 숙여 허리 근육이 충분히 이신(Stretched)되도록 유도합니다.",
+                    "엉덩이 장골릉 부근에서 시작하여 척추 기립근 양옆을 따라 흉추 하부까지 15% 장력으로 부착합니다.",
+                    "수평 보조 스트립을 통증 집중 부위에 크로스(+) 형태로 부착하여 압박 분산을 유도합니다."
+                ],
+                exercises: [
+                    {
+                        title: "고양이-소 자세 (Cat-Cow Stretch)",
+                        desc: "네발 기기 자세에서 숨을 내쉬며 등과 허리를 둥글게 말아올렸다가 천천히 바닥으로 내립니다.",
+                        dose: "10회씩 3세트"
+                    },
+                    {
+                        title: "골반 후방 경사 (Pelvic Tilt)",
+                        desc: "바닥에 누워 복부에 힘을 주고 허리 바닥이 뜨지 않도록 골반을 뒤로 굴려줍니다.",
+                        dose: "15회씩 3세트"
+                    }
+                ]
+            },
+            wrist: {
+                name: "손목 (Wrist / Carpal & Extensors)",
+                diagnosis: "손목 신근 건염 및 수근관 증후군 초기",
+                tapingName: "수근 신근 및 손목 관절 안정화 테이핑",
+                shape: "Fan/I-Strip (신근군 지지)",
+                tension: "20% (적정 장력)",
+                target: "수근신근 (Wrist Extensors)",
+                steps: [
+                    "손목을 가벼운 굴곡(Flexion) 상태로 유지합니다.",
+                    "손등 부근에서 시작하여 전완부 팔꿈치 바깥쪽 상과 방향으로 20% 장력으로 끌어올립니다.",
+                    "손목 관절 주위를 한 바퀴 감싸주는 손목 밴드형 I스트립으로 고정합니다."
+                ],
+                exercises: [
+                    {
+                        title: "손목 신전근 스트레치",
+                        desc: "팔을 앞으로 쭉 뻗고 반대손으로 손가락을 아래로 지긋이 눌러 전완부 신근을 이완합니다.",
+                        dose: "30초 유지 x 3회"
+                    }
+                ]
+            },
+            elbow: {
+                name: "팔꿈치 (Elbow / Epicondylitis)",
+                diagnosis: "외측상과염 (테니스 엘보)",
+                tapingName: "전완 신근 부착부 감압 카운터포스 테이핑",
+                shape: "Counterforce I-Strip + Diamond Spread",
+                tension: "35% (압박 장력)",
+                target: "상완외측상과 및 총신근건",
+                steps: [
+                    "팔꿈치를 편 상태에서 팔꿈치 바깥쪽 튀어나온 뼈(외측상과) 바로 아래 부근에 기준점을 잡습니다.",
+                    "35%의 장력으로 테이프를 팽팽하게 당겨 전완부를 한 바퀴 감싸줍니다.",
+                    "마무리 앵커는 장력 없이 부착하여 혈관 압박을 방지합니다."
+                ],
+                exercises: [
+                    {
+                        title: "원심성 손목 운동 (Eccentric Wrist Curl)",
+                        desc: "가벼운 물병을 들고 손목을 위로 올릴 때는 반대손 도움을 받고, 내릴 때는 천천히 버티며 내립니다.",
+                        dose: "10회씩 3세트"
+                    }
+                ]
+            },
+            neck: {
+                name: "목 (Cervical Spine / Upper Trapezius)",
+                diagnosis: "상부승모근 긴장 및 거북목 증후군",
+                tapingName: "상부승모근 감압 및 경추 신전근 지지 Y형 테이핑",
+                shape: "Y-Strip (승모근 상부)",
+                tension: "15% (최소 장력)",
+                target: "상부승모근 (Upper Trapezius) 및 견갑거근",
+                steps: [
+                    "고개를 통증 반대 방향으로 숙여 상부승모근을 이신시킵니다.",
+                    "견봉(어깨 끝) 부근에서 시작하여 목덜미 윗부분까지 15% 장력으로 부착합니다.",
+                    "두 갈래의 Y스트립이 목덜미의 긴장된 근섬유를 감싸도록 안착시킵니다."
+                ],
+                exercises: [
+                    {
+                        title: "턱 당기기 (Chin Tuck)",
+                        desc: "정면을 본 상태에서 턱을 뒤로 수평하게 당겨 경추 심부굴곡근을 강화합니다.",
+                        dose: "10초 유지 x 10회"
+                    }
+                ]
+            },
+            toes: {
+                name: "발가락 (Toes / Hallux Valgus / Plantar)",
+                diagnosis: "무지외반증 (Hallux Valgus) 및 지간신경종 / 족저근막염",
+                tapingName: "엄지발가락 외반 교정 및 내측 아치/횡아치 수평 지지 테이핑",
+                shape: "I-Strip (엄지 교정) + Y-Strip (내측 아치 촉진)",
+                tension: "30% ~ 40% (외반 교정 방향 강한 장력)",
+                target: "무지외전근 (Abductor Hallucis) 및 제1 중족족지관절 (1st MTP Joint)",
+                steps: [
+                    "발목을 90도 중립 상태로 유지하고 엄지발가락을 바깥쪽(외선)으로 부드럽게 고정합니다.",
+                    "첫 번째 I형 테이프의 끝을 엄지발가락 끝 안쪽에 무장력으로 안착시킵니다.",
+                    "35% 장력을 주면서 엄지발가락을 안쪽으로 당겨 정렬을 맞추고, 발바닥 내측 아치를 지나 뒤꿈치 안쪽까지 테이핑합니다.",
+                    "두 번째 보조 테이프를 발바닥 가로 아치(중족골 헤드 밑)에 30% 장력으로 감싸 발바닥 압력을 균등 분산시킵니다."
+                ],
+                exercises: [
+                    {
+                        title: "숏풋 운동 (Short Foot Exercise)",
+                        desc: "발가락을 굽히지 않은 채, 발바닥 내측 아치를 위로 끌어올려 중족골 머리와 뒤꿈치를 가깝게 조여 발 내재근을 강화합니다.",
+                        dose: "5초 유지 x 15회, 3세트"
+                    },
+                    {
+                        title: "타월 컬 운동 (Towel Curls)",
+                        desc: "바닥에 수건을 깔아두고 발가락의 힘만 사용하여 수건을 몸쪽으로 천천히 끌어당깁니다.",
+                        dose: "수건 1장 끌어당기기 x 3회"
+                    },
+                    {
+                        title: "발가락 펼치기 (Toe Spread Out)",
+                        desc: "모든 발가락을 공중에서 부채꼴처럼 가볍게 벌렸다가, 특히 엄지발가락과 새끼발가락을 먼 방향으로 착지시키는 연습을 합니다.",
+                        dose: "10회 x 3세트"
+                    }
+                ]
+            }
+        };
+
+        function buildReportData() {
+            const painLocRadio = document.querySelector('input[name="painLocation"]:checked');
+            const locKey = painLocRadio ? painLocRadio.value : 'toes';
+            const vasVal = document.getElementById('vas-slider').value;
+            const durationSelect = document.querySelector('select[name="duration"]').value;
+
+            const data = clinicalDatabase[locKey] || clinicalDatabase['toes'];
+
+            document.getElementById('report-location').innerText = data.name;
+            document.getElementById('report-vas').innerText = `${vasVal}점 / 10점 만점`;
+            document.getElementById('report-duration').innerText = durationSelect.includes('acute') ? '급성기 통증' : (durationSelect.includes('chronic') ? '만성 피로성 통증' : '반복성 통증');
+            
+            let diagText = data.diagnosis;
+            if (locKey === 'toes') {
+                const toeAngle = document.getElementById('toe-angle').value;
+                diagText += ` (${toeAngle === 'severe' ? '중증' : (toeAngle === 'moderate' ? '중등도' : '경도')} 변형 양상 관찰)`;
+            }
+            document.getElementById('report-diagnosis').innerText = diagText;
+
+            // Taping Info
+            document.getElementById('taping-name').innerText = data.tapingName;
+            document.getElementById('taping-shape').innerText = data.shape;
+            document.getElementById('taping-tension').innerText = data.tension;
+            document.getElementById('taping-target').innerText = data.target;
+
+            const stepsList = document.getElementById('taping-steps');
+            stepsList.innerHTML = '';
+            data.steps.forEach(step => {
+                const li = document.createElement('li');
+                li.innerText = step;
+                stepsList.appendChild(li);
+            });
+
+            // Rehab Exercises
+            const rehabContainer = document.getElementById('rehab-exercises-container');
+            rehabContainer.innerHTML = '';
+            data.exercises.forEach(ex => {
+                const div = document.createElement('div');
+                div.className = "bg-slate-50 border border-slate-200 rounded-xl p-5 space-y-2";
+                div.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <h4 class="font-bold text-slate-900 text-sm">${ex.title}</h4>
+                        <span class="text-[10px] bg-medical-100 text-medical-800 font-bold px-2 py-0.5 rounded">${ex.dose}</span>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">${ex.desc}</p>
+                `;
+                rehabContainer.appendChild(div);
+            });
+        }
+
+        function resetClinic() {
+            document.getElementById('questionnaire-form').reset();
+            document.getElementById('vas-slider').value = 5;
+            updateVasLabel(5);
+            toggleToeSpecificQuestions();
+            document.getElementById('photo-preview-container').classList.add('hidden');
+            document.getElementById('snapshot-preview').classList.add('hidden');
+            document.getElementById('capture-btn').classList.add('hidden');
+            document.getElementById('retake-btn').classList.add('hidden');
+            document.getElementById('webcam-placeholder').classList.remove('hidden');
+            document.getElementById('webcam-status').innerText = "카메라 대기중";
+            document.getElementById('webcam-status').className = "text-xs px-2.5 py-1 rounded-full bg-slate-200 text-slate-600 font-medium";
+            
+            if (mediaStream) {
+                mediaStream.getTracks().forEach(track => track.stop());
+                mediaStream = null;
+            }
+            goToStep(1);
+        }
+
+        // Modal Helpers
+        function showModal(title, message, type = "info") {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-message').innerText = message;
+            const icon = document.getElementById('modal-icon');
+            if (type === "warning") {
+                icon.className = "w-12 h-12 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center mx-auto text-xl font-bold";
+                icon.innerText = "!";
+            } else if (type === "error") {
+                icon.className = "w-12 h-12 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mx-auto text-xl font-bold";
+                icon.innerText = "✕";
+            } else {
+                icon.className = "w-12 h-12 rounded-full bg-medical-50 text-medical-600 flex items-center justify-center mx-auto text-xl font-bold";
+                icon.innerText = "i";
+            }
+            document.getElementById('custom-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('custom-modal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
